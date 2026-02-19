@@ -1,6 +1,5 @@
-```mermaid
+``` mermaid
 sequenceDiagram
-
 
 browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note
 server-->>browser: 302 Found - Redirect to https://studies.cs.helsinki.fi/exampleapp/notes
@@ -14,5 +13,4 @@ Note right of browser: Browser executes script to get all the notes (and the new
 browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
 server->>browser: 200 OK - [{"content":"noteContent","date":"noteDate"}, ...]
 Note right of browser: Browser renders all notes
-
 ```
