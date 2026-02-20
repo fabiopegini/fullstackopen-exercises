@@ -12,4 +12,4 @@ browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
 server-->>browser: 200 OK - [{"content":"noteContent","date":"noteDate"}, ...]
 Note right of browser: Browser renders all notes with the function redrawNotes()
 
-```
+´´´
