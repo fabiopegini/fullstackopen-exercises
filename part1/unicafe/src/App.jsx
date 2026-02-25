@@ -2,7 +2,7 @@ import { useState } from "react"
 
 const Button = ({text, handleClick}) => <button onClick={handleClick}>{text}</button>
 
-const Display = ({text, number}) => <p>{text + " " + number}</p>
+const StatisticLine = ({text, value}) => <p>{text + " " + value}</p>
 
 const Statistics = ({goodReviews, neutralReviews, badReviews, allReviews, averageReviews, goodPercentage}) => {
   if(allReviews === 0) return (
@@ -15,12 +15,12 @@ const Statistics = ({goodReviews, neutralReviews, badReviews, allReviews, averag
   return (
    <div>
       <h1>Statistics</h1> 
-      <Display text={"good"} number={goodReviews} />
-      <Display text={"neutral"} number={neutralReviews} />
-      <Display text={"bad"} number={badReviews} />
-      <Display text={"all"} number={allReviews} />
-      <Display text={"average"} number={averageReviews} />
-      <Display text={"positive"} number={goodPercentage} />
+      <StatisticLine text={"good"} value={goodReviews} />
+      <StatisticLine text={"neutral"} value={neutralReviews} />
+      <StatisticLine text={"bad"} value={badReviews} />
+      <StatisticLine text={"all"} value={allReviews} />
+      <StatisticLine text={"average"} value={averageReviews} />
+      <StatisticLine text={"positive"} value={goodPercentage} />
     </div>
   )
 }
@@ -36,10 +36,11 @@ const App = () => {
   
   const handleClick = (newReviewValue, addReview, addToAverage) => {
     addReview(newReviewValue)
-    setAllReviews(allReviews + 1)
-    setAverageReviews((goodReviews - badReviews + addToAverage) / (allReviews + 1))
-    if(addToAverage > 0) setGoodPercentage(newReviewValue * 100 / (allReviews + 1))
-    if(addToAverage <= 0) setGoodPercentage(goodReviews * 100 / (allReviews + 1))
+    const newAllReviews = allReviews + 1
+    setAllReviews(newAllReviews)
+    setAverageReviews((goodReviews - badReviews + addToAverage) / (newAllReviews))
+    if(addToAverage > 0) setGoodPercentage(newReviewValue * 100 / (newAllReviews))
+    if(addToAverage <= 0) setGoodPercentage(goodReviews * 100 / (newAllReviews))
   }
 
   return (
