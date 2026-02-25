@@ -5,9 +5,16 @@ const Button = ({text, handleClick}) => <button onClick={handleClick}>{text}</bu
 const Display = ({text, number}) => <p>{text + " " + number}</p>
 
 const Statistics = ({goodReviews, neutralReviews, badReviews, allReviews, averageReviews, goodPercentage}) => {
+  if(allReviews === 0) return (
+    <div>
+      <h1>Statistics</h1>
+      <p>No feedback given yet</p>
+    </div>
+  )
+
   return (
    <div>
-      <h1>Statistics</h1>
+      <h1>Statistics</h1> 
       <Display text={"good"} number={goodReviews} />
       <Display text={"neutral"} number={neutralReviews} />
       <Display text={"bad"} number={badReviews} />
