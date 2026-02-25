@@ -4,6 +4,20 @@ const Button = ({text, handleClick}) => <button onClick={handleClick}>{text}</bu
 
 const Display = ({text, number}) => <p>{text + " " + number}</p>
 
+const Statistics = ({goodReviews, neutralReviews, badReviews, allReviews, averageReviews, goodPercentage}) => {
+  return (
+   <div>
+      <h1>Statistics</h1>
+      <Display text={"good"} number={goodReviews} />
+      <Display text={"neutral"} number={neutralReviews} />
+      <Display text={"bad"} number={badReviews} />
+      <Display text={"all"} number={allReviews} />
+      <Display text={"average"} number={averageReviews} />
+      <Display text={"positive"} number={goodPercentage} />
+    </div>
+  )
+}
+
 
 const App = () => {
   const [goodReviews, setGoodReviews] = useState(0)
@@ -29,15 +43,7 @@ const App = () => {
         <Button text={"neutral"} handleClick={() => handleClick(neutralReviews + 1, setNeutralReviews, 0)} />
         <Button text={"good"} handleClick={() => handleClick(goodReviews + 1, setGoodReviews, 1)} />
       </div>
-      <div>
-        <h1>Statistics</h1>
-        <Display text={"good"} number={goodReviews} />
-        <Display text={"neutral"} number={neutralReviews} />
-        <Display text={"bad"} number={badReviews} />
-        <Display text={"all"} number={allReviews} />
-        <Display text={"average"} number={averageReviews} />
-        <Display text={"positive"} number={goodPercentage} />
-      </div>
+      <Statistics goodReviews={goodReviews} neutralReviews={neutralReviews} badReviews={badReviews} allReviews={allReviews} averageReviews={averageReviews} goodPercentage={goodPercentage} />
   </>
   )
 }
