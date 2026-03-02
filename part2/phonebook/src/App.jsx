@@ -9,6 +9,14 @@ function App() {
 
     if(newName.trim() === "" ) return
 
+    const alreadyAdded = persons.some(person => person.name === newName)
+
+    if(alreadyAdded) {
+      setNewName("")
+      alert(`${newName} is already added to phonebook`)
+      return
+    }
+
     const newPerson = {
       name: newName
     }
