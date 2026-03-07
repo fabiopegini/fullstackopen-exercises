@@ -42,6 +42,19 @@ function App() {
     return
   }
 
+  const handleRemove = (person) => {
+    const message = `Delete ${person.name}?`
+    if(!window.confirm(message)) return
+
+    personService.remove(person.id)
+    .then(removedPerson => {
+      const newPersons = persons.filter(person => person.id != removedPerson.id)
+      setPersons(newPersons)
+    })
+
+    return
+  }
+
   const filtered = filter.length === 0 ? persons : persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
 
   return (
@@ -49,7 +62,7 @@ function App() {
       <h2>Phonebook</h2>
       <Filter filter={filter} changeFilter={setFilter} />
       <AddForm handleSubmit={handleSubmit} newName={newName} changeNewName={setNewName} newNumber={newNumber} changeNewNumber={setNewNumber} />
-      <ShowAll filtered={filtered} />
+      <ShowAll filtered={filtered} handleRemove={handleRemove} />
     </div>
   )
 }
