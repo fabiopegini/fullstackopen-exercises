@@ -20,12 +20,22 @@ function App() {
 
     if(newName.trim() === "" || newNumber.trim() === "") return
 
-    const alreadyAdded = persons.some(person => person.name === newName)
+    const alreadyAdded = persons.find(person => person.name === newName)
 
     if(alreadyAdded) {
-      setNewName("")
-      setNewNumber("")
-      alert(`${newName} is already added to phonebook`)
+      const message = `${newName} is already added to phonebook, do you want to replace the old number with a new one`
+      if(!window.confirm(message)) return
+
+      const updatedPerson = {...alreadyAdded, number: newNumber}
+
+      personService.update(updatedPerson)
+      .then(updatedPerson => {
+        const newPersons = persons.filter(person => person.id != updatedPerson.id )
+        setPersons(newPersons.concat(updatedPerson))
+        setNewName("")
+        setNewNumber("")
+      })
+      
       return
     }
 
