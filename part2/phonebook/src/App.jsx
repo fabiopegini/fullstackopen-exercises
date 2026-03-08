@@ -3,12 +3,14 @@ import personService from "./services/persons.js"
 import Filter from './components/Filter'
 import AddForm from './components/AddForm'
 import ShowAll from './components/ShowAll'
+import ShowMsg from './components/ShowMsg.jsx'
 
 function App() {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState("")
   const [newNumber, setNewNumber] = useState("")
   const [filter, setFilter] = useState("")
+  const [successMsg, setSuccessMsg] = useState("")
 
   useEffect(() => {
     personService.getAll()
@@ -35,6 +37,9 @@ function App() {
         setNewName("")
         setNewNumber("")
       })
+
+    setSuccessMsg("Modified successfully")
+    setTimeout(() => setSuccessMsg(""), 5000)
       
       return
     }
@@ -48,6 +53,8 @@ function App() {
     .then(returnedPerson => setPersons(persons.concat(returnedPerson)))
     setNewName("")
     setNewNumber("")
+    setSuccessMsg("Added successfully")
+    setTimeout(() => setSuccessMsg(""), 5000)
 
     return
   }
@@ -72,6 +79,7 @@ function App() {
       <h2>Phonebook</h2>
       <Filter filter={filter} changeFilter={setFilter} />
       <AddForm handleSubmit={handleSubmit} newName={newName} changeNewName={setNewName} newNumber={newNumber} changeNewNumber={setNewNumber} />
+      {successMsg && <ShowMsg msg={successMsg} />}
       <ShowAll filtered={filtered} handleRemove={handleRemove} />
     </div>
   )
