@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import axios from "axios"
+import ShowCountry from "./components/ShowCountry"
 
 function App() {
   const [search, setSearch] = useState("")
   const [countries, setCountries] = useState([])
   const [filteredCoutries, setFilteredCountries] = useState([])
   const [searchMsg, setSearchMsg] = useState("")
-  // const [countryInfo, setCountryInfo] = useState({})
+  const [selected, setSelected] = useState(null)
 
   useEffect(() => {
       axios.get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
@@ -23,6 +24,7 @@ function App() {
     if(newSearch === "") {
       setSearchMsg("")
       setFilteredCountries([])
+      setSelected(null)
       return
     }
 
@@ -31,12 +33,14 @@ function App() {
     if(newFilteredCountries.length < 1) {
       setSearchMsg("No matches")
       setFilteredCountries([])
+      setSelected(null)
       return
     }
     
     if(newFilteredCountries.length > 10) {
       setSearchMsg("Too many matches, use a more specific name")
       setFilteredCountries([])
+      setSelected(null)
       return
     }
 
@@ -52,21 +56,18 @@ function App() {
         {searchMsg ? <div>{searchMsg}</div> : null}
       </form>
       <div>
-        {filteredCoutries.map(country => <div key={country.cca2}>{country.name.common}</div>)}
+        {filteredCoutries.map(country => {
+          return (
+            <div key={country.cca2}>
+              {country.name.common + " "}
+              <button onClick={() => setSelected(country)}>Show</button>
+            </div>
+          )
+        })}
+          
       </div>
-      {filteredCoutries.length === 1 && (
-        <div key={filteredCoutries[0].cca2}>
-          <h1>{filteredCoutries[0].name.common}</h1>
-          <div>{`Capital: ${filteredCoutries[0].capital}`}</div>
-          <div>{`Area: ${filteredCoutries[0].area}`}</div>
-          <h2>Lenguages</h2>
-          <ul>
-            {Object.keys(filteredCoutries[0].languages).map(language => <li key={language}>{filteredCoutries[0].languages[language]}</li>)}
-          </ul>
-          <img src={filteredCoutries[0].flags.png} alt={filteredCoutries[0].flags.alt} />
-        </div>
-        )
-      }
+      {filteredCoutries.length === 1 && <ShowCountry country={filteredCoutries[0]} />}
+      {selected && <ShowCountry country={selected} />}
     </div>
   )
 }
