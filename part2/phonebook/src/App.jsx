@@ -11,6 +11,7 @@ function App() {
   const [newNumber, setNewNumber] = useState("")
   const [filter, setFilter] = useState("")
   const [successMsg, setSuccessMsg] = useState("")
+  const [errorMsg, setErrorMsg] = useState("")
 
   useEffect(() => {
     personService.getAll()
@@ -67,6 +68,9 @@ function App() {
     .then(removedPerson => {
       const newPersons = persons.filter(person => person.id != removedPerson.id)
       setPersons(newPersons)
+    }).catch(() => {
+      setErrorMsg(`${person.name} has already been removed from the phonebook`)
+      setTimeout(() => setErrorMsg(""), 5000)
     })
 
     return
@@ -79,7 +83,8 @@ function App() {
       <h2>Phonebook</h2>
       <Filter filter={filter} changeFilter={setFilter} />
       <AddForm handleSubmit={handleSubmit} newName={newName} changeNewName={setNewName} newNumber={newNumber} changeNewNumber={setNewNumber} />
-      {successMsg && <ShowMsg msg={successMsg} />}
+      {successMsg && <ShowMsg msg={successMsg} type={"success"}/>}
+      {errorMsg && <ShowMsg msg={errorMsg} type={"error"} />}
       <ShowAll filtered={filtered} handleRemove={handleRemove} />
     </div>
   )

@@ -24,11 +24,6 @@
       "id": "a156",
       "name": "Ado Lovelace",
       "number": "03495934954"
-    },
-    {
-      "id": "e80f",
-      "name": "Arta Hellas",
-      "number": "93459345"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
