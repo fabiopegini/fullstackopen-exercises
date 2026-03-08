@@ -1,21 +1,36 @@
 import { useEffect, useState } from 'react'
 import axios from "axios"
 import ShowCountry from "./components/ShowCountry"
+import SearchBar from "./components/SearchBar"
+import ShowMany from "./components/ShowMany"
 
 function App() {
   const [search, setSearch] = useState("")
-  const [countries, setCountries] = useState([])
+  const [countries, setCountries] = useState(null)
   const [filteredCoutries, setFilteredCountries] = useState([])
   const [searchMsg, setSearchMsg] = useState("")
   const [selected, setSelected] = useState(null)
+  const [weather, setWeather] = useState(null)
 
   useEffect(() => {
+    if(!countries) {
       axios.get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
       .then(res => {
         setCountries(res.data)
       })
       .catch(() => console.error("Error fetching data"))
-  }, [])
+    }
+
+    if(selected) {
+      axios.get(`http://api.weatherapi.com/v1/current.json?key=${import.meta.env.VITE_API_KEY}&q=${selected.capital}&aqi=no`)
+      .then(res => setWeather(res.data.current))
+    }
+
+    if(filteredCoutries.length === 1) {
+      axios.get(`http://api.weatherapi.com/v1/current.json?key=${import.meta.env.VITE_API_KEY}&q=${filteredCoutries[0].capital}&aqi=no`)
+      .then(res => setWeather(res.data.current))
+    }
+  }, [selected, countries, filteredCoutries])
 
   const handleSearch = (ev) => {
     const newSearch = ev.target.value
@@ -25,6 +40,7 @@ function App() {
       setSearchMsg("")
       setFilteredCountries([])
       setSelected(null)
+      setWeather(null)
       return
     }
 
@@ -34,6 +50,7 @@ function App() {
       setSearchMsg("No matches")
       setFilteredCountries([])
       setSelected(null)
+      setWeather(null)
       return
     }
     
@@ -41,6 +58,7 @@ function App() {
       setSearchMsg("Too many matches, use a more specific name")
       setFilteredCountries([])
       setSelected(null)
+      setWeather(null)
       return
     }
 
@@ -51,23 +69,10 @@ function App() {
 
   return (
     <div>
-      <form>
-        <input placeholder="Search a country" value={search} onChange={(e) => handleSearch(e)}/>
-        {searchMsg ? <div>{searchMsg}</div> : null}
-      </form>
-      <div>
-        {filteredCoutries.map(country => {
-          return (
-            <div key={country.cca2}>
-              {country.name.common + " "}
-              <button onClick={() => setSelected(country)}>Show</button>
-            </div>
-          )
-        })}
-          
-      </div>
-      {filteredCoutries.length === 1 && <ShowCountry country={filteredCoutries[0]} />}
-      {selected && <ShowCountry country={selected} />}
+      <SearchBar searchMsg={searchMsg} search={search} handleSearch={handleSearch} />
+      <ShowMany filteredCoutries={filteredCoutries} setSelected={setSelected} />
+      {filteredCoutries.length === 1 && <ShowCountry country={filteredCoutries[0]} weather={weather} />}
+      {selected && <ShowCountry country={selected} weather={weather} />}
     </div>
   )
 }
